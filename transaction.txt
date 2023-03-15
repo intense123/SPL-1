@@ -1,5 +1,5 @@
-egg, bread, potato, banana, garlic, cardamom, teabag, pineapple
-bread, broccoli, potato, egg, coffee, cardamom, milk
-broccoli, egg, guava, chicken, milk
-broccoli, potato, kite, sprite, pineapple
-bread, egg, potato, chili, coffee, pineapple, cardamom, nut
+potato,chilli,mango,apple,rice
+apple,chilli,guava,rice
+oil,rice,pickel,apple,chilli,guava
+chilli,potato,guava,apple
+oil,mango,rice,apple,potato
