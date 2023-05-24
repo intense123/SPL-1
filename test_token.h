@@ -1,5 +1,6 @@
 
 #include"item_struct.h"
+#include"sort.h"
 #define BUFFER_SIZE 1024
 
 int header_count(char str1[]){
@@ -131,7 +132,7 @@ void text_to_token(struct item item_info[], const char *filename){
     char *last_token;
     char arr[100];
     int length;
-    int support = 2;
+    int support = MIN_SUP;
     printf("\n The record count and support is %d  %d\n", record_count, support);
 
     if( input_file == NULL ){
@@ -177,7 +178,10 @@ void text_to_token(struct item item_info[], const char *filename){
         
      // int n = sizeof(transaction_info)/sizeof(transaction_info[0]);
       //printf("\n transaction size %d\n", n);
-    	bubbleSort(transaction_info, 1000);
+        int tot = 0;
+        while (transaction_info[tot].count != 0) ++tot;
+        printf(" ==== %d\n", tot);
+    	bubbleSort(transaction_info, tot);
     	int flag = 0;
     	for(int i = 0; transaction_info[i].count!=0; i++){
 		if(strcmp(transaction_info[i].name, "")!=0){
@@ -188,7 +192,7 @@ void text_to_token(struct item item_info[], const char *filename){
   	if(flag == 1)
   		fprintf(output_file, "\n");
   	  	
-  	for(int i =0; i<10; i++)
+  	for(int i =0; i<tot; i++)
   		transaction_info[i].count = 0;
   	}
 

@@ -1,10 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<assert.h>
+#include"item_struct.h"
 #define BUFFER_SIZE 1024
 #define MAX 100
+
  typedef  struct Node{
-	char item[100];
+	char item[MAX];
 	int freq;
 	int child_count;
 	struct Node *children[MAX];
@@ -14,7 +17,7 @@
 }node;
 
 typedef struct header{
-	char item[100];
+	char item[MAX];
 	int freq;
 	node *first_node;
 	struct header *next1;
@@ -22,7 +25,7 @@ typedef struct header{
 } header_node;
 
 typedef struct condition{
-	char item[100];
+	char item[MAX];
 	int freq;
 	struct conditon *child[MAX];
 	struct condition *next;
@@ -31,6 +34,23 @@ header_node *start = NULL;
 node *root = NULL;
 int index1;
 
+/*condition_node *create_condition_header(char str[]){
+		condition_node *temp = (condition_node *) malloc(sizeof(condition_node));
+		strcpy(temp->item, str);
+		temp->next = NULL;
+		for (int i=0; i<MAX; i++)
+			temp->child[i] = NULL;
+		return temp;
+		}
+condition_node *create_conditon(char str[], int freq1){
+			condition_node *temp = (condition_node *) malloc(sizeof(condition_node));
+			strcpy(temp->item, str);
+			temp->freq =freq1
+			temp->next = NULL;
+			for (int i=0; i<MAX; i++)
+				temp->child[i] = NULL;
+		return temp;
+		}*/
 
 node *create_node(char str[]){
 	
@@ -52,7 +72,9 @@ node *create_node(char str[]){
 	
 void create_header_list(char str[], node *current)
      { 
-    
+     //header_node *prev, *curr, *temp;
+     //prev = NULL;
+     //curr = start;
      
      if (start == NULL) {
      		header_node *temp = (header_node *)malloc(sizeof(header_node));
@@ -98,7 +120,15 @@ void create_header_list(char str[], node *current)
 						curr = curr->next1;
 						}
 				if(curr->next1 == NULL) {
-					
+					/*if (curr->freq == temp1->freq){
+						if(strcmp(curr->item, temp1->item)>0)
+							curr->next1 = temp1;
+						else {
+						
+							temp1->next1 = prev->next1;;
+							prev->next1 = temp;
+							}	
+						} */
 						curr->next1 = temp1;
 						temp1->prev1 = curr;
 				}
@@ -331,3 +361,212 @@ void print_path(header_node *current)
 			temp = temp->next;
 		}
 	}
+
+int insert_item (int total_size, char current_items[MAX][MAX], int current_freq[MAX], char new_item[MAX], int new_freq) {
+	for (int i = 0; i < total_size; ++i) {
+		if (strcmp(current_items[i], new_item) == 0) return total_size;
+	}
+	current_freq[total_size] = new_freq;
+	memcpy(current_items[total_size], new_item, MAX);
+	int at = total_size;
+	while (at > 0 && (current_freq[at - 1] > current_freq[at] || (current_freq[at - 1] == current_freq[at] && strcmp(current_items[at - 1], new_item) > 0))) {
+		int temp_freq = current_freq[at - 1];
+		current_freq[at - 1] = current_freq[at];
+		current_freq[at] = temp_freq;
+		memcpy(current_items[at], current_items[at - 1], MAX);
+		memcpy(current_items[at - 1], new_item, MAX);
+		--at;
+	}
+	return total_size + 1;
+}
+
+int total_freq (char item[MAX]) {
+	header_node *temp = start;
+	while (temp != NULL) {
+		if (strcmp(temp->item, item) == 0) break;
+		temp = temp->next1;
+	}
+	return temp->freq;
+}
+
+int total_itemsets;
+char freq_itemsets[MAX][20][MAX];
+long long keys[1000000], values[1000000], itemset_size[MAX];
+
+void generate_fp(const char *filename) {
+	FILE *output_file = fopen(filename, "w");
+
+	header_node *temp = start;
+
+	while (temp != NULL) {
+		if (strcmp(temp->item, "") == 0) {
+			temp = temp->next1;
+			continue;
+		}
+
+		int total_size = 0;
+		char current_items[1000][MAX];
+		int current_freq[1000];
+		memset(current_items, 0, sizeof(current_items));
+
+		node *temp1 = temp->first_node;
+		temp1 = temp1->next;
+		
+		while (temp1 != NULL) {
+			node *tree_node = temp1;
+			while (tree_node->parent != NULL) {
+				tree_node = tree_node->parent;
+				if (strcmp(tree_node->item, "") == 0) break;
+				total_size = insert_item(total_size, current_items, current_freq, tree_node->item, total_freq(tree_node->item));
+			}
+			temp1 = temp1->next;
+		} 
+		memcpy(current_items[total_size], temp->item, MAX);
+
+		int map_size = 0;
+		temp1 = temp->first_node;
+		temp1 = temp1->next;
+
+		char path[MAX][MAX];
+		
+		while (temp1 != NULL) {
+			node *tree_node = temp1;
+			int path_length = 0;
+			while (tree_node->parent != NULL) {
+				tree_node = tree_node->parent;
+				if (strcmp(tree_node->item, "") == 0) break;
+				memcpy(path[path_length++], tree_node->item, MAX);
+			}
+			for (int path_mask = 1; path_mask < 1 << path_length; ++path_mask) {
+				int at = 0;
+				long long mask = 0;
+				for (int i = 0; i < path_length; ++i) if (path_mask & 1 << i) {
+					while (at < total_size && strcmp(current_items[at], path[i]) != 0) ++at;
+					assert(at < total_size);
+					mask |= 1LL << at;
+				}
+				int pos = 0;
+				while (pos < map_size && keys[pos] != mask) ++pos;
+				if (pos == map_size) ++map_size, keys[pos] = mask, values[pos] = temp1->freq;
+				else values[pos] += temp1->freq;
+			} 
+			temp1 = temp1->next;
+		}	
+		assert(map_size < 1000000);
+		for (int i = 0; i < map_size; ++i) {
+			long long mask = keys[i] | 1LL << total_size;
+			long long total_count = values[i];
+
+			if (total_count < MIN_SUP) continue;
+
+			int this_size = 0;
+			// frequent itemset
+			fprintf(output_file, "Frequency: %lld, Itemset: ", total_count);
+			fprintf(output_file, "%s", temp->item);
+			memcpy(freq_itemsets[total_itemsets][this_size++], temp->item, MAX);
+			for (int j = 0; j < total_size; ++j) if (mask & 1LL << j) {
+				fprintf(output_file, ", %s", current_items[j]);
+				memcpy(freq_itemsets[total_itemsets][this_size++], current_items[j], MAX);	
+			}
+			fprintf(output_file, "\n");
+
+			itemset_size[total_itemsets++] = this_size;
+		}
+		temp = temp->next1;
+
+	}
+
+	fprintf(output_file, "Total itemsets: %d\n", total_itemsets);
+}
+
+int buff_size;
+char buff[20][MAX];
+
+int get_count() {
+	header_node *temp = start;
+	int result = 0;
+
+	while (temp != NULL) {
+		if (strcmp(temp->item, buff[0]) != 0) {
+			temp = temp->next1;
+			continue;
+		}
+
+		node *temp1 = temp->first_node;
+		temp1 = temp1->next;
+		
+		while (temp1 != NULL) {
+			node *tree_node = temp1;
+			int matched = 0;
+			while (tree_node != NULL && matched < buff_size) {
+				if (strcmp(tree_node->item, "") == 0) break;
+				if (strcmp(tree_node->item, buff[matched]) == 0) ++matched;
+				tree_node = tree_node->parent;
+			}
+			if (matched == buff_size) result += temp1->freq;
+			temp1 = temp1->next;
+		} 
+		temp = temp->next1;
+	}
+
+	return result;
+}
+
+void generate_associations(const char *filename) {
+	FILE *confidence_file = fopen(filename, "w");
+
+	for (int i = 0; i < total_itemsets; ++i) {
+		buff_size = 0;
+		int this_size = itemset_size[i];
+		for (int j = 0; j < this_size; ++j) {
+			memcpy(buff[buff_size++], freq_itemsets[i][j], MAX);
+		}
+		int total_count = get_count();
+		for (int mask = 1; mask < (1 << this_size) - 1; ++mask) {
+			buff_size = 0;
+			for (int j = 0; j < this_size; ++j) if (mask & 1 << j) {
+				memcpy(buff[buff_size++], freq_itemsets[i][j], MAX);
+			}
+			int subset_count = get_count();
+			if (subset_count == 0) continue;
+			double confidence = (double) total_count / subset_count;
+			if (confidence >= MIN_CONF) {
+				for (int j = 0; j < this_size; ++j) if (mask & 1 << j) {
+					fprintf(confidence_file, "%s ", freq_itemsets[i][j]);
+				}
+				fprintf(confidence_file, "--> ");
+				for (int j = 0; j < this_size; ++j) if (!(mask & 1 << j)) {
+					fprintf(confidence_file, "%s ", freq_itemsets[i][j]);
+				}
+				fprintf(confidence_file, "............ with confidence %0.6f percent\n", confidence * 100);
+			}
+		}
+	}
+}
+
+/*int main( )
+{
+ 
+   
+   int i;
+  
+   const char *filename = "sorted_transaction.txt";
+   build_tree( filename);
+   int test = 0;
+    traverse_tree(root);
+    printf("\n******\n");
+    print_header();
+    printf("\n*****\n");
+    header_node *temp;
+    temp = start;
+    while(temp->next1!=NULL){
+    	printf("\n");
+    	print_path(temp);
+    	printf("\n");
+    	temp = temp->next1;
+    	}
+    //print_path(temp);
+    return 0;
+}*/
+
+	

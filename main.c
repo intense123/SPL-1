@@ -2,7 +2,6 @@
 #include <string.h>
 #include "item_struct.h"
 #include "test_token.h"
-#include "sort.h"
 #include "fp_tree_build.h"
 //struct item item_info[1000];
  //  struct item transaction_info[1000];
@@ -18,8 +17,10 @@ int main( )
 	item_info[i].count = 0;
 	transaction_info[i].count = 0;
 	}
-   const char *filename = "tran.txt";
+   const char *filename = "groc.txt";
    const char *filename1 = "sorted_transaction.txt";
+   const char *output_filename = "frequent_itemsets.txt";
+   const char *association_filename = "association_rules.txt";
    text_to_token(item_info, filename);
    
     
@@ -41,6 +42,7 @@ int main( )
 
     		}
     sort_the_transaction(transaction_info, item_info, filename, filename1);
+    // printf("YO\n");
     build_tree(filename1);
     print_header();
     header_node *temp;
@@ -56,5 +58,7 @@ int main( )
     	temp = temp->prev1;
     	}
     printf("\n ************ \n");
+    generate_fp(output_filename);
+    generate_associations(association_filename);
     return 0;
 }

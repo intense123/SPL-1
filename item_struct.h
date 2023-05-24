@@ -2,6 +2,10 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+
+#define MIN_SUP 100
+#define MIN_CONF 0.2
+
 struct item{
 	char name[100];
 	int count;
