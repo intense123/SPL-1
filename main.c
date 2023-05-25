@@ -26,21 +26,24 @@ int main( )
     
     int size = sizeof(item_info)/sizeof(item_info[0]);
     bubbleSort(item_info, size);
-    printf("\n Output of Frequncy count\n");
-    printf("\n         item            count\n");
+    printf("\n \t Output of Frequncy count\n");
+    printf("\n item\t\t\t\t\t count \n");
+
     for (int i = 0; i<size; i++)
 	{
-		if(item_info[i].count>=3)
-		    	printf("       %s                %d\n", item_info[i].name, item_info[i].count);
+		if(item_info[i].count >= MIN_SUP){
+			if(strcmp(item_info[i].name, " ") != 0)
+		    	printf("%-40s  %d\n", item_info[i].name, item_info[i].count);
+		}
     }
     //Sort the frequency table in descending order
     bubbleSort(item_info, size);
     	
-    printf("\nThe content of structure\n");
-        for(i = 0; item_info[i].count!=0; i++){
-        	printf("\n%s %d\n", item_info[i].name, item_info[i].count);
+   // printf("\nThe content of structure\n");
+     //   for(i = 0; item_info[i].count!=0; i++){
+       // 	printf("\n%s %d\n", item_info[i].name, item_info[i].count);
 
-    		}
+    	//	}
     sort_the_transaction(transaction_info, item_info, filename, filename1);
     // printf("YO\n");
     build_tree(filename1);
