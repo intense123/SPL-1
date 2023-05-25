@@ -210,7 +210,7 @@ void build_tree( const char *filename){
         while( fgets(buffer, BUFFER_SIZE, input_file) != NULL ){
 	     node *temp = root;
 	     
-	     printf("\n Read Line\n");
+	    // printf("\n Read Line\n");
 	     
             
             // Gets each token as a string and prints it
@@ -230,10 +230,10 @@ void build_tree( const char *filename){
                 
                 int index1= 0, flag = 0;
                 if(temp->children[index1]!= NULL)
-                	printf("\n%s\n", (temp->children[index1])->item);
+                	//printf("\n%s\n", (temp->children[index1])->item);
                 while(temp->children[index1] != NULL){
                 	node *current = temp->children[index1];
-                	printf("\n %s %s\n", current->item, arr);
+                	//printf("\n %s %s\n", current->item, arr);
                 	
                 	if(strcmp(arr, current->item)== 0){
                 		current->freq++;
@@ -242,7 +242,7 @@ void build_tree( const char *filename){
                 	}
                 	index1++;
                  }
-                 printf("\n%d %d\n", flag,index1);
+                // printf("\n%d %d\n", flag,index1);
                  
                  
                  
@@ -258,7 +258,7 @@ void build_tree( const char *filename){
                 		 temp ->children[index1] = current;
                 		 temp ->child_count++;
                 		 create_header_list(arr, current);
-                		 printf("\n the flag is 0 \n");
+                		// printf("\n the flag is 0 \n");
                   
                  		}
                  
@@ -266,14 +266,14 @@ void build_tree( const char *filename){
                   
                   temp = temp->children[index1];
 		   if(temp!=NULL)
-		   printf("\n %s \n", temp->item);
+		   //printf("\n %s \n", temp->item);
 		   
                 
                 last_token = strtok( NULL, delimiter_characters );
             
 
         }
-        printf("\n complete\n");
+       // printf("\n complete\n");
         }
 
         if( ferror(input_file) ){
@@ -310,7 +310,7 @@ void print_header()
  	temp = temp->next1;
  	}
  printf("\n");
- header_node *temp1 = start;
+ /*header_node *temp1 = start;
  while(temp1->next1!= NULL)
  	temp1 = temp1->next1;
  while (temp1!= NULL)
@@ -319,6 +319,7 @@ void print_header()
  	temp1 = temp1->prev1;
  	 }
  	printf("\n");
+	*/
  
  }
  
