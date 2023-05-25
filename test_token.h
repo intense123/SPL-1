@@ -180,7 +180,7 @@ void text_to_token(struct item item_info[], const char *filename){
       //printf("\n transaction size %d\n", n);
         int tot = 0;
         while (transaction_info[tot].count != 0) ++tot;
-        printf(" ==== %d\n", tot);
+       // printf(" ==== %d\n", tot);
     	bubbleSort(transaction_info, tot);
     	int flag = 0;
     	for(int i = 0; transaction_info[i].count!=0; i++){
