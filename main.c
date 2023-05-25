@@ -32,7 +32,7 @@ int main( )
     for (int i = 0; i<size; i++)
 	{
 		if(item_info[i].count >= MIN_SUP){
-			if(strcmp(item_info[i].name, " ") != 0)
+			if(strcmp(item_info[i].name, "") != 0)
 		    	printf("%-40s  %d\n", item_info[i].name, item_info[i].count);
 		}
     }
