@@ -23,11 +23,6 @@ The Market Basket Analyzer uses the FP Growth algorithm to mine frequent itemset
 
 For more details on the FP Growth algorithm, refer to the research paper by Han, Jiawei, Jian Pei, and Yiwen Yin.
 
-# Contributing
-Contributions to this project are welcome. If you find any issues or have suggestions for improvements, feel free to open an issue or create a pull request. Please follow the Contributing Guidelines when contributing to this project.
-
-# License
-This project is licensed under the MIT License.
 
 # Acknowledgements
 The FP Growth algorithm research paper by Han, Pei, and Yin for the foundational knowledge.
