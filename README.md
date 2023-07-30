@@ -1,15 +1,9 @@
 # SPL-1
 # Project Title: Market Basket Analyzer
-# Table of Contents
-Introduction
-Features
-Installation
-Usage
-Dataset
-Algorithm
-Contributing
-License
-Acknowledgements
+# Name: Reza Abdullah 
+# Roll: 1335
+# Supervisor: Dr. Zerina Begum
+
 # Introduction
 Market Basket Analysis is a powerful technique used in data mining and retail analytics to uncover relationships between items frequently purchased together by customers. This project implements the FP Growth algorithm in C to efficiently mine frequent itemsets from transaction data and discover association rules. The algorithm avoids the costly generation of candidate itemsets used in traditional approaches like Apriori, making it faster and more scalable.
 
@@ -41,6 +35,3 @@ Kaggle for providing the sample transaction dataset used for testing.
 We hope that the Market Basket Analyzer using FP Growth Algorithm in C proves to be helpful for your market basket analysis tasks. If you have any questions or need assistance, please feel free to reach out.
 
 Happy mining and analyzing!
-# Name: Reza Abdullah 
-# Roll: 1335
-# Supervisor: Dr. Zerina Begum
